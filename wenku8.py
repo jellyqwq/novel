@@ -84,22 +84,22 @@ class Wenku8():
         self.get_index_html()
         self.get_title_author()
         self.get_detail_info()
-        # for roll in self.info_dict.keys():
-        #     os.makedirs('./{}-{}/{}/'.format(self.novel_title, self.novel_author, roll), exist_ok=True)
-        #     for chapter in self.info_dict[roll].keys():
-        #         self.get_article(self.get_novel_url(self.info_dict[roll][chapter]))
-        #         with open('./{}-{}/{}/{}.md'.format(self.novel_title, self.novel_author, roll, chapter), 'w', encoding='utf-8') as f:
-        #             f.write('<p align="center">{}</p>\n\n'.format(chapter))
-        #             for i in self.contents:
-        #                 f.write('{}\n\n'.format(i))
-        #         log.info('{}-{} 保存成功'.format(roll, chapter))
-        #         self.contents = []
-        #         time.sleep(random.random())
+        for roll in self.info_dict.keys():
+            os.makedirs('./{}-{}/{}/'.format(self.novel_title, self.novel_author, roll), exist_ok=True)
+            for chapter in self.info_dict[roll].keys():
+                self.get_article(self.get_novel_url(self.info_dict[roll][chapter]))
+                with open('./{}-{}/{}/{}.md'.format(self.novel_title, self.novel_author, roll, chapter), 'w', encoding='utf-8') as f:
+                    f.write('<p align="center">{}</p>\n\n'.format(chapter))
+                    for i in self.contents:
+                        f.write('{}\n\n'.format(i))
+                log.info('{}-{} 保存成功'.format(roll, chapter))
+                self.contents = []
+                time.sleep(random.random())
         self.make_index_md()
 
 if __name__ == "__main__":
-    # w = Wenku8(input('输入小说索引页的URL:'))
-    w = Wenku8('https://www.wenku8.net/novel/2/2255/index.htm')
+    w = Wenku8(input('输入小说索引页的URL:'))
+    # w = Wenku8('https://www.wenku8.net/novel/2/2255/index.htm')
     w.save_novel()
     input('按任意键继续...')
 
