@@ -76,7 +76,7 @@ class Wenku8():
             for roll in self.info_dict.keys():
                 f.write('- [{}](/{}-{}/{})\n'.format(roll, self.novel_title, self.novel_author, roll))
                 for chapter in self.info_dict[roll].keys():
-                    f.write('  - [{}](/{}-{}/{}/{})\n'.format(chapter, self.novel_title, self.novel_author, roll, chapter))
+                    f.write('  - [{}](/{}-{}/{}/{}.md)\n'.format(chapter, self.novel_title, self.novel_author, roll, chapter))
         with open('README.md', 'a', encoding='utf-8') as f:
             f.write('- [{}](/{}-{}/{}.md)\n'.format(self.novel_title, self.novel_title, self.novel_author, self.novel_title))
     
