@@ -92,7 +92,10 @@ class Wenku8():
                 with open('./{}-{}/{}/{}.md'.format(self.novel_title, self.novel_author, roll, chapter), 'w', encoding='utf-8') as f:
                     f.write('<p align="center">{}</p>\n\n'.format(chapter))
                     for i in self.contents:
-                        f.write('{}\n\n'.format(i))
+                        if 'http://pic.wenku8.com/pictures' not in i:
+                            f.write('{}\n\n'.format(i))
+                        else:
+                            f.write('![image]({})\n\n'.format(i))
                 log.info('{}-{} 保存成功'.format(roll, chapter))
                 self.contents = []
                 time.sleep(random.random())
