@@ -79,11 +79,11 @@ class Wenku8():
             os.makedirs('./{}-{}/{}/'.format(self.novel_title, self.novel_author, roll), exist_ok=True)
             for chapter in self.info_dict[roll].keys():
                 self.get_article(self.get_novel_url(self.info_dict[roll][chapter]))
-                with open('./{}-{}/{}/{}-{}.md'.format(self.novel_title, self.novel_author, roll, roll, chapter), 'w', encoding='utf-8') as f:
-                    f.write('<p align="center">{}</p>\n'.format(chapter))
+                with open('./{}-{}/{}/{}.md'.format(self.novel_title, self.novel_author, roll, chapter), 'w', encoding='utf-8') as f:
+                    f.write('<p align="center">{}</p>\n\n'.format(chapter))
                     for i in self.contents:
                         f.write('{}\n\n'.format(i))
-                log.info('{}-{}保存成功'.format(roll, chapter))
+                log.info('{}-{} 保存成功'.format(roll, chapter))
                 self.contents = []
                 time.sleep(random.random())
 
