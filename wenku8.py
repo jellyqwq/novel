@@ -76,7 +76,7 @@ class Wenku8():
             for roll in self.info_dict.keys():
                 f.write('- [{}](/{}-{}/{})\n'.format(roll, self.novel_title.replace(' ','%20'), self.novel_author.replace(' ','%20'), roll.replace(' ','%20')))
                 for chapter in self.info_dict[roll].keys():
-                    f.write('  - [{}](/{}-{}/{}/{}.md)\n'.format(chapter, self.novel_title.replace(' ','%20'), self.novel_author.replace(' ','%20'), roll, chapter.replace(' ','%20')))
+                    f.write('  - [{}](/{}-{}/{}/{}.md)\n'.format(chapter, self.novel_title.replace(' ','%20'), self.novel_author.replace(' ','%20'), roll.replace(' ','%20'), chapter.replace(' ','%20')))
         with open('README.md', 'a', encoding='utf-8') as f:
             f.write('- [{}](/{}-{}/{}.md)\n'.format(self.novel_title, self.novel_title.replace(' ','%20'), self.novel_author.replace(' ','%20'), self.novel_title.replace(' ','%20')))
     
