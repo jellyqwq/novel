@@ -82,7 +82,7 @@ class Wenku8():
                 with open('./{}-{}/{}/{}-{}.md'.format(self.novel_title, self.novel_author, roll, roll, chapter), 'w', encoding='utf-8') as f:
                     f.write('<p align="center">{}</p>\n'.format(chapter))
                     for i in self.contents:
-                        f.write('{}\n'.format(i))
+                        f.write('{}\n\n'.format(i))
                 log.info('{}-{}保存成功'.format(roll, chapter))
                 self.contents = []
                 time.sleep(random.random())
