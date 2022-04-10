@@ -1,0 +1,6 @@
+- [第一卷](/艾蕾GY(elegy)-作者：泉和良/第一卷)
+  - [Chapter 1](/艾蕾GY(elegy)-作者：泉和良/第一卷/Chapter%201.md)
+  - [Chapter 2](/艾蕾GY(elegy)-作者：泉和良/第一卷/Chapter%202.md)
+  - [Chapter 3](/艾蕾GY(elegy)-作者：泉和良/第一卷/Chapter%203.md)
+  - [Chapter 4](/艾蕾GY(elegy)-作者：泉和良/第一卷/Chapter%204.md)
+  - [Chapter 5](/艾蕾GY(elegy)-作者：泉和良/第一卷/Chapter%205.md)

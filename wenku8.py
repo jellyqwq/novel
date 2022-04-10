@@ -1,12 +1,10 @@
 import os
-import random
-import time
 import requests
 from bs4 import BeautifulSoup
 from bs4.element import Tag
 import re
 import logging as log
-from wenku8_novel_list import *
+from novel_list import *
 from multiprocessing import Pool
 
 log.basicConfig(
@@ -91,7 +89,11 @@ class Wenku8():
         self.get_title_author()
         self.get_detail_info()
         self.novel_title = re.sub(r'\?','？', self.novel_title)
+        self.novel_title = re.sub(r'\.','。', self.novel_title)
+        self.novel_title = re.sub(r'\:','：', self.novel_title)
         self.novel_author = re.sub(r'\?','？', self.novel_author)
+        self.novel_author = re.sub(r'\.','。', self.novel_author)
+        self.novel_author = re.sub(r'\:','：', self.novel_author)
         for roll in self.info_dict.keys():
             folder_roll = re.sub(r'\?','？', roll)
             os.makedirs('./{}-{}/{}/'.format(self.novel_title, self.novel_author, folder_roll), exist_ok=True)
@@ -101,9 +103,10 @@ class Wenku8():
                 chapter = re.sub(r'\*', '＊', chapter)
                 chapter = re.sub(r'\?', '？', chapter)
                 chapter = re.sub(r'/', '-', chapter)
+                chapter = re.sub(r'\"','\'',chapter)
                 if '{}.md'.format(chapter) in li:
                     os.system('cls')
-                    print('\r{}.md 已存在'.format(chapter))
+                    log.info('{}.md 已存在'.format(chapter))
                     break
                 with open('./{}-{}/{}/{}.md'.format(self.novel_title, self.novel_author, folder_roll, chapter), 'w', encoding='utf-8') as f:
                     f.write('<p align="center">{}</p>\n\n'.format(chapter))
@@ -113,7 +116,7 @@ class Wenku8():
                         else:
                             f.write('![image]({})\n\n'.format(i))
                 os.system('cls')
-                print('\r{}-{} 保存成功'.format(roll, chapter))
+                log.info('{}-{} 保存成功'.format(roll, chapter))
                 self.contents = []
                 # time.sleep(random.random())
             self.make_index_md()
@@ -123,10 +126,11 @@ def main(novel):
     return Wenku8(f'https://www.wenku8.net/novel/2/{novel}/index.htm').save_novel()
     
 if __name__ == "__main__":
-    pool = Pool()
-    x = pool.map(main, novel_list_03)
-    pool.close()
-    # pool.join()
-    with open('README.md', 'a', encoding='utf-8') as f:
-        for i in x:
-            f.write(i)
+    # pool = Pool()
+    # x = pool.map(main, sorted(novel_list, reverse=True))
+    # pool.close()
+    for novel in novel_list:
+        x = main(novel)
+        with open('README.md', 'a', encoding='utf-8') as f:
+            for i in x:
+                f.write(i)

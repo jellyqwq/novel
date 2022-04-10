@@ -1,0 +1,5 @@
+- [第一卷](/光之小说(light%20novel)-作者：泷本龙彦/第一卷)
+  - [chapter01 探索者的觉醒](/光之小说(light%20novel)-作者：泷本龙彦/第一卷/chapter01%20探索者的觉醒.md)
+  - [chapter02 天使的降临](/光之小说(light%20novel)-作者：泷本龙彦/第一卷/chapter02%20天使的降临.md)
+  - [chapter03 黑暗迷宫](/光之小说(light%20novel)-作者：泷本龙彦/第一卷/chapter03%20黑暗迷宫.md)
+  - [chapter04 光之小说 (lightnovel)](/光之小说(light%20novel)-作者：泷本龙彦/第一卷/chapter04%20光之小说%20(lightnovel).md)

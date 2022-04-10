@@ -40,7 +40,7 @@ class X:
                 self.num_list.append(i)
     
     def save(self):
-        with open('list.py', 'w', encoding='utf-8') as f:
+        with open('novel_list.py', 'w', encoding='utf-8') as f:
             f.write('novel_list = {}'.format(self.num_list))
 
 if __name__ == "__main__":
