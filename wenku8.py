@@ -124,7 +124,7 @@ def main(novel):
     
 if __name__ == "__main__":
     pool = Pool()
-    x = pool.map(main, novel_list_01)
+    x = pool.map(main, novel_list_02)
     pool.close()
     pool.join()
     with open('README.md', 'a', encoding='utf-8') as f:
