@@ -7,6 +7,7 @@ from bs4.element import Tag
 import re
 import logging as log
 from wenku8_novel_list import novel_list
+from multiprocessing import Pool
 
 log.basicConfig(
     format='%(asctime)s %(levelname)s %(message)s',
@@ -101,13 +102,24 @@ class Wenku8():
                 time.sleep(random.random())
         self.make_index_md()
 
+def main(novel):
+    w = Wenku8(f'https://www.wenku8.net/novel/2/{novel}/index.htm')
+    w.save_novel()
+    del w
+
 if __name__ == "__main__":
     # w = Wenku8(input('输入小说索引页的URL:'))
     # # w = Wenku8('https://www.wenku8.net/novel/2/2255/index.htm')
     # w.save_novel()
-    for novel in novel_list:
-        w = Wenku8(f'https://www.wenku8.net/novel/2/{novel}/index.htm')
-        w.save_novel()
-        del w
+
+    # for novel in novel_list:
+    #     w = Wenku8(f'https://www.wenku8.net/novel/2/{novel}/index.htm')
+    #     w.save_novel()
+    #     del w
+
+    pool = Pool()
+    pool.map(main, novel_list)
+    pool.close()
+    pool.join()
     input('按任意键继续...')
 
