@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from bs4.element import Tag
 import re
 import logging as log
-from wenku8_novel_list import novel_list
+from wenku8_novel_list import *
 from multiprocessing import Pool
 
 log.basicConfig(
@@ -79,14 +79,16 @@ class Wenku8():
                 f.write('- [{}](/{}-{}/{})\n'.format(roll, self.novel_title.replace(' ','%20'), self.novel_author.replace(' ','%20'), roll.replace(' ','%20')))
                 for chapter in self.info_dict[roll].keys():
                     f.write('  - [{}](/{}-{}/{}/{}.md)\n'.format(chapter, self.novel_title.replace(' ','%20'), self.novel_author.replace(' ','%20'), roll.replace(' ','%20'), chapter.replace(' ','%20')))
-        with open('README.md', 'a', encoding='utf-8') as f:
-            f.write('- [{}](/{}-{}/{}.md)\n'.format(self.novel_title, self.novel_title.replace(' ','%20'), self.novel_author.replace(' ','%20'), self.novel_title.replace(' ','%20')))
+        
     
     def save_novel(self):
         self.get_index_html()
         self.get_title_author()
         self.get_detail_info()
+        self.novel_title = re.sub(r'\?','？', self.novel_title)
+        self.novel_author = re.sub(r'\?','？', self.novel_author)
         for roll in self.info_dict.keys():
+            roll = re.sub(r'\?','？', roll)
             os.makedirs('./{}-{}/{}/'.format(self.novel_title, self.novel_author, roll), exist_ok=True)
             for chapter in self.info_dict[roll].keys():
                 self.get_article(self.get_novel_url(self.info_dict[roll][chapter]))
@@ -100,26 +102,16 @@ class Wenku8():
                 log.info('{}-{} 保存成功'.format(roll, chapter))
                 self.contents = []
                 time.sleep(random.random())
-        self.make_index_md()
-
+            self.make_index_md()
+        return '- [{}](/{}-{}/{}.md)\n'.format(self.novel_title, self.novel_title.replace(' ','%20'), self.novel_author.replace(' ','%20'), self.novel_title.replace(' ','%20'))
+        
 def main(novel):
-    w = Wenku8(f'https://www.wenku8.net/novel/2/{novel}/index.htm')
-    w.save_novel()
-    del w
-
+    return Wenku8(f'https://www.wenku8.net/novel/2/{novel}/index.htm').save_novel()
+    
 if __name__ == "__main__":
-    # w = Wenku8(input('输入小说索引页的URL:'))
-    # # w = Wenku8('https://www.wenku8.net/novel/2/2255/index.htm')
-    # w.save_novel()
-
-    # for novel in novel_list:
-    #     w = Wenku8(f'https://www.wenku8.net/novel/2/{novel}/index.htm')
-    #     w.save_novel()
-    #     del w
-
-    pool = Pool()
-    pool.map(main, novel_list)
-    pool.close()
-    pool.join()
+    with Pool() as pool:
+        x = pool.map(main, novel_list_00)
+    with open('README.md', 'a', encoding='utf-8') as f:
+        for i in x:
+            f.write(i)
     input('按任意键继续...')
-
