@@ -74,10 +74,15 @@ class Wenku8():
                     self.contents.append(i.a['href'])
 
     def make_index_md(self):
+        li = os.listdir('./{}-{}/'.format(self.novel_title, self.novel_author))
+        if '{}.md'.format(self.novel_title) in li:
+            return '- [{}](/{}-{}/{}.md)\n'.format(self.novel_title, self.novel_title.replace(' ','%20'), self.novel_author.replace(' ','%20'), self.novel_title.replace(' ','%20'))
         with open('./{}-{}/{}.md'.format(self.novel_title, self.novel_author, self.novel_title), 'w', encoding='utf-8') as f:
             for roll in self.info_dict.keys():
                 f.write('- [{}](/{}-{}/{})\n'.format(roll, self.novel_title.replace(' ','%20'), self.novel_author.replace(' ','%20'), roll.replace(' ','%20')))
                 for chapter in self.info_dict[roll].keys():
+                    chapter = re.sub(r'\*', '＊', chapter)
+                    chapter = re.sub(r'\?', '？', chapter)
                     f.write('  - [{}](/{}-{}/{}/{}.md)\n'.format(chapter, self.novel_title.replace(' ','%20'), self.novel_author.replace(' ','%20'), roll.replace(' ','%20'), chapter.replace(' ','%20')))
         
     
@@ -88,20 +93,28 @@ class Wenku8():
         self.novel_title = re.sub(r'\?','？', self.novel_title)
         self.novel_author = re.sub(r'\?','？', self.novel_author)
         for roll in self.info_dict.keys():
-            roll = re.sub(r'\?','？', roll)
-            os.makedirs('./{}-{}/{}/'.format(self.novel_title, self.novel_author, roll), exist_ok=True)
+            folder_roll = re.sub(r'\?','？', roll)
+            os.makedirs('./{}-{}/{}/'.format(self.novel_title, self.novel_author, folder_roll), exist_ok=True)
+            li = os.listdir('./{}-{}/{}/'.format(self.novel_title, self.novel_author, folder_roll))
             for chapter in self.info_dict[roll].keys():
                 self.get_article(self.get_novel_url(self.info_dict[roll][chapter]))
-                with open('./{}-{}/{}/{}.md'.format(self.novel_title, self.novel_author, roll, chapter), 'w', encoding='utf-8') as f:
+                chapter = re.sub(r'\*', '＊', chapter)
+                chapter = re.sub(r'\?', '？', chapter)
+                if '{}.md'.format(chapter) in li:
+                    os.system('cls')
+                    print('\r{}.md 已存在'.format(chapter))
+                    break
+                with open('./{}-{}/{}/{}.md'.format(self.novel_title, self.novel_author, folder_roll, chapter), 'w', encoding='utf-8') as f:
                     f.write('<p align="center">{}</p>\n\n'.format(chapter))
                     for i in self.contents:
                         if 'http://pic.wenku8.com/pictures' not in i:
                             f.write('{}\n\n'.format(i))
                         else:
                             f.write('![image]({})\n\n'.format(i))
-                log.info('{}-{} 保存成功'.format(roll, chapter))
+                os.system('cls')
+                print('\r{}-{} 保存成功'.format(roll, chapter))
                 self.contents = []
-                time.sleep(random.random())
+                # time.sleep(random.random())
             self.make_index_md()
         return '- [{}](/{}-{}/{}.md)\n'.format(self.novel_title, self.novel_title.replace(' ','%20'), self.novel_author.replace(' ','%20'), self.novel_title.replace(' ','%20'))
         
@@ -109,9 +122,10 @@ def main(novel):
     return Wenku8(f'https://www.wenku8.net/novel/2/{novel}/index.htm').save_novel()
     
 if __name__ == "__main__":
-    with Pool() as pool:
-        x = pool.map(main, novel_list_00)
+    pool = Pool()
+    x = pool.map(main, novel_list_01)
+    pool.close()
+    pool.join()
     with open('README.md', 'a', encoding='utf-8') as f:
         for i in x:
             f.write(i)
-    input('按任意键继续...')
