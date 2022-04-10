@@ -10,5 +10,5 @@ for chapter_index in book_list:
         for el in second_list:
             if '.md' == el[-3:]:
                 with open('README.md', 'a', encoding='utf-8') as f:
-                    f.write('- [{}](/{}/{}.md)\n'.format(\
+                    f.write('- [{}](/{}/{})\n'.format(\
                         chapter_index, chapter_index.replace(' ','%20'), el.replace(' ','%20')))
