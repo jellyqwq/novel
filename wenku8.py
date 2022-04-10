@@ -100,6 +100,7 @@ class Wenku8():
                 self.get_article(self.get_novel_url(self.info_dict[roll][chapter]))
                 chapter = re.sub(r'\*', '＊', chapter)
                 chapter = re.sub(r'\?', '？', chapter)
+                chapter = re.sub(r'/', '-', chapter)
                 if '{}.md'.format(chapter) in li:
                     os.system('cls')
                     print('\r{}.md 已存在'.format(chapter))
