@@ -42,6 +42,7 @@ PINYIN_RANGES = (
 @dataclass(frozen=True)
 class NovelEntry:
     label: str
+    book_dir: Path
     target: Path
     group: str
     sort_key: tuple[str, str, str]
@@ -163,6 +164,30 @@ def markdown_link(path: Path) -> str:
     return f"/{relative}".replace(" ", "%20")
 
 
+def legacy_link_prefixes(book_dir: Path) -> list[str]:
+    raw_prefix = f"/{book_dir.name}"
+    space_escaped_prefix = raw_prefix.replace(" ", "%20")
+    return list(dict.fromkeys([raw_prefix, space_escaped_prefix]))
+
+
+def fix_book_index_links(entries: list[NovelEntry]) -> int:
+    changed_count = 0
+
+    for entry in entries:
+        text = entry.target.read_text(encoding="utf-8")
+        updated = text
+
+        for legacy_prefix in legacy_link_prefixes(entry.book_dir):
+            fixed_prefix = f"/{NOVELS_DIR.name}/{legacy_prefix.removeprefix('/')}".replace(" ", "%20")
+            updated = updated.replace(f"]({legacy_prefix}", f"]({fixed_prefix}")
+
+        if updated != text:
+            entry.target.write_text(updated, encoding="utf-8")
+            changed_count += 1
+
+    return changed_count
+
+
 def escape_label(text: str) -> str:
     return text.replace("\\", "\\\\").replace("[", "\\[").replace("]", "\\]")
 
@@ -185,6 +210,7 @@ def collect_entries() -> list[NovelEntry]:
         entries.append(
             NovelEntry(
                 label=book_dir.name,
+                book_dir=book_dir,
                 target=target,
                 group=group,
                 sort_key=(group, initials_for(title), book_dir.name.casefold()),
@@ -228,9 +254,11 @@ def write_index(entries: list[NovelEntry]) -> None:
 def main() -> None:
     moved = migrate_legacy_book_dirs()
     entries = collect_entries()
+    fixed = fix_book_index_links(entries)
     write_index(entries)
 
     print(f"moved {len(moved)} root book directories into {NOVELS_DIR.name}/")
+    print(f"fixed {fixed} book index files")
     print(f"indexed {len(entries)} novels in {INDEX_PATH.name}")
 
 
