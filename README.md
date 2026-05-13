@@ -2,6 +2,10 @@
 
 一个使用 GitHub Markdown 存放和阅读小说文本的轻量仓库。
 
+## 阅读入口
+
+[打开小说索引](INDEX.md)
+
 ## 内容组织
 
 - `novels/`：小说正文目录，每本小说一个子目录。
@@ -13,4 +17,3 @@
 ```bash
 python3 main_index.py
 ```
-
